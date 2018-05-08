@@ -67,8 +67,7 @@
   Tmp=zeros(8,8);
   path=[path;stack]%迭代的方式
   Cell=zeros(real_col,36);
-  Final_R=cell(9);
-  ......
+  Final_R=cell(9)
   Final_R{real_x,9}=(Cell);
   ```
 
@@ -80,7 +79,7 @@
 - 对整个图循环遍历，对任意两点求其之间的所有路径，并对结果处理将其保存在cell中
   - 求解路径
   ```
-  while p>0
+    while p>0
     begin=stack(p);
     flag=0;
     for j=1:Node
