@@ -60,4 +60,71 @@
   0	0	0	0	0	0	0	0;
   0	0	0	0	0	0	0	0;
   0	0	0	0	0	0	0	0];
+  ```
+- path使用迭代的方式保存各路径，Tmp矩阵整理path,保存每两点之间的所有路径，Cell将路径关系与具体的路号对应，转换成为最终所需的表示形式，
+  最终结果存储在cell Final_R中  
   ```
+  Tmp=zeros(8,8);
+  path=[path;stack]%迭代的方式
+  Cell=zeros(real_col,36);
+  Final_R=cell(9);
+  ......
+  Final_R{real_x,9}=(Cell);
+  ```
+
+编程实现
+------
+*对Matlab所知甚少，编写过程中想用递归却不会写...最后用栈堆砌代码，可以所很有毒了...*
+
+- 初始化各数据结构等
+- 对整个图循环遍历，对任意两点求其之间的所有路径，并对结果处理将其保存在cell中
+  - 求解路径
+  ```
+  while p>0
+    begin=stack(p);
+    flag=0;
+    for j=1:Node
+        if (Map(begin,j)>0&&Visited(begin,j)==0&&vflag(j)==0)
+            if (j==destination)
+                path=[path;stack]
+               % Visited(begin,destination)=1;
+                
+              
+                continue;
+            else
+                Visited(begin,j)=1;
+                stack=[stack;j];
+                p=p+1;
+                vflag(j)=1;
+            flag=1;
+            break;
+            end
+        end
+    end
+    if (flag==0)
+        vflag(stack(p))=0;
+        for t=1:8
+            Visited(stack(p),t)=0;
+        end
+        p=p-1;
+       
+        if(p==0)
+           break;
+        end
+        stack=stack(1:p);
+        
+    end
+  end
+  ```
+  - （一个bug）得到的path中存在重复的路径，需要将其删除，并整理成矩阵格式
+  - 将路径矩阵对应Map邻接矩阵，找出两点之间的路号并保存在Cell中
+  - 将结果保存在最终的Final_R中（**由于实际图上的4，5，9均与6号节点连接，则当终点为6号时，所求路径可同时对应为到第4、5、9区域**）
+- 添加未处理的5、9号区域的路径，实际上即为从4号节点出发达到其他点的路径
+- 添加4，5，9区域之间互达的路径，由于该区域连接的节点均为6号，在遍历过程无法遍历到6号到6号，所以最后特加上该块的处理，仅有一条连接通路，循环添加即可
+
+后记
+---
+- 数据结构课程时对图未做深入了解，等到后来接触面试、比赛等题目时发现图真xx重要
+- 网上关于有向图的类似blog写的大多一塌糊涂，云里雾里，令人绝望，遂自己头硬着写了下来
+- 关于图的基本遍历（BFS、DFS、有向/无向）还是要多看看......当然还有拓扑排序和关键路径...
+- 具体的算法实现上还存在问题，后续有空再完善
