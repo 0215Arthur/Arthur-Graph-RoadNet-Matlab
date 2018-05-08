@@ -65,7 +65,7 @@
   最终结果存储在cell Final_R中  
   ```
   Tmp=zeros(8,8);
-  path=[path;stack]%迭代的方式
+  path=[path;stack]%迭代的方式
   Cell=zeros(real_col,36);
   Final_R=cell(9)
   Final_R{real_x,9}=(Cell);
